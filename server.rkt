@@ -1,12 +1,23 @@
 #lang racket
 
 (require web-server/servlet
-         web-server/servlet-env)
+         web-server/servlet-env
+         web-server/dispatch)
 
-(define (start req)
-  (response/xexpr
-   '(html (head (title "Racket Heroku App"))
-          (body (h1 "It works!")))))
+(define-values (dispatch dispatch-url)
+  (dispatch-rules
+   [("") root]
+   [else not-found]))
+
+(define (root req)
+  (response/xexpr "Hello"))
+
+(define (not-found req)
+  (response/full 404 #"Not Found"
+                 (current-seconds)
+                 #f
+                 '()
+                 (list #"Not Found\n")))
 
 (define port (if (getenv "PORT")
                  (string->number (getenv "PORT"))
@@ -14,8 +25,9 @@
 
 (define api-key (getenv "AIRTABLE_API_KEY"))
 
-(serve/servlet start
+(serve/servlet dispatch
                #:servlet-path "/"
                #:listen-ip #f
                #:port port
-               #:command-line? #t)
+               #:command-line? #t
+               #:file-not-found-responder not-found)
