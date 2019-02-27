@@ -12,6 +12,8 @@
                  (string->number (getenv "PORT"))
                  8080))
 
+(define api-key (getenv "AIRTABLE_API_KEY"))
+
 (serve/servlet start
                #:servlet-path "/"
                #:listen-ip #f
