@@ -7,7 +7,7 @@
   (response/full 200 #"OK"
                  (current-seconds)
                  #"application/json; charset=utf-8"
-                 '()
+                 (list (header #"Access-Control-Allow-Origin" #"*"))
                  (list (jsexpr->bytes content))))
 
 (define (response-404 content)
