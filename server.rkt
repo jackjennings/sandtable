@@ -28,15 +28,15 @@
   (records (airtable-get api-key (format "/v0/~a/~a" base name))))
 
 (define (season game-name season-name)
-  (serialize-season
-    (findf (lambda (s) (equal? season-name (field s 'Season #f)))
-           (game game-name))))
+  (findf (lambda (s) (equal? season-name (field s 'Season #f)))
+           (game game-name)))
 
 (define (serialize-season season)
   (hash-remove (fields season) 'Public))
 
 (define (handle-season req game-name season-name)
-  (response-json (season game-name season-name)))
+  (response-json
+    (serialize-season (season game-name season-name))))
 
 (define (handle-404 req)
   (response-404 #"Not Found"))
