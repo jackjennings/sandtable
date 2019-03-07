@@ -1,7 +1,6 @@
 #lang racket
 
-(require web-server/servlet-env
-         web-server/dispatch
+(require web-server/dispatch
          "src/airtable.rkt"
          "src/http.rkt"
          "src/web.rkt")
@@ -46,9 +45,4 @@
     [("game" (string-arg) "season" (string-arg)) handle-season]
     [else handle-404]))
 
-(serve/servlet dispatch
-               #:servlet-path "/"
-               #:servlet-regexp #rx""
-               #:listen-ip #f
-               #:port port
-               #:command-line? #t)
+(serve dispatch port)

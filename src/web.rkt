@@ -1,7 +1,8 @@
 #lang racket
 
 (require json
-         web-server/servlet)
+         web-server/servlet
+         web-server/servlet-env)
 
 (define (response-json content)
   (response/full 200 #"OK"
@@ -17,5 +18,14 @@
                  '()
                  (list content)))
 
+(define (serve dispatch port)
+  (serve/servlet dispatch
+                 #:servlet-path "/"
+                 #:servlet-regexp #rx""
+                 #:listen-ip #f
+                 #:port port
+                 #:command-line? #t))
+
 (provide response-404
-         response-json)
+         response-json
+         serve)
